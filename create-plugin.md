@@ -2,7 +2,7 @@
 title: Create Plugin
 description: 
 published: 1
-date: 2025-02-01T07:03:21.088Z
+date: 2025-02-01T07:08:08.733Z
 tags: 
 editor: markdown
 dateCreated: 2025-01-26T17:35:57.754Z
@@ -197,6 +197,70 @@ class ServicesExample extends \OMV\Rpc\ServiceAbstract {
 ### workbench
 
 # Datatable
+
+```yaml
+version: "1.0"
+type: component
+data:
+  name: omv-services-FILETYPE-FILENAME-form-page
+  type: datatablePage
+  config:
+    autoReload: false
+    hasSearchField: true
+    rowId: name
+    sorters:
+      - dir: asc
+        prop: name
+    store:
+      proxy:
+        service: Example
+        get:
+          method: getExampleList  //GET ROWS FROM rpc
+    columns:
+      - name: " "
+        prop: image
+        flexGrow: 0.15
+        cellTemplateName: image
+        cellTemplateConfig:
+          class: "mat-icon notranslate mat-icon-no-color"
+          alt: " "
+          src: "{{ image }}"
+      - name: _("Name")
+        prop: name
+        flexGrow: 1
+        sortable: true
+    actions:
+      - type: iconButton
+        icon: mdi:plus-box
+        tooltip: _("Add example file")
+        enabledConstraints:
+          minSelected: 1
+          maxSelected: 1
+        execute:
+          type: formDialog
+          formDialog:
+            title: _("Add...")
+            fields:
+              - type: textInput
+                name: name
+                label: _("Name")
+                value: "{{ _selected[0].name }}"
+              - type: textInput
+                name: description
+                label: _("Description")
+                value: ""
+            buttons:
+              submit:
+                text: _("Add")
+                execute:
+                  type: request
+                  request:
+                    service: Example
+                    method: setExample
+                    progressMessage: _("Adding an example  ...")
+                    successNotification: _("Example has been added.")
+                    successUrl: /services/FILETYPE/PLUGINNAME
+```
 
 # Form
 
