@@ -2,7 +2,7 @@
 title: Create Plugin
 description: 
 published: 1
-date: 2025-02-01T07:02:10.229Z
+date: 2025-02-01T07:03:21.088Z
 tags: 
 editor: markdown
 dateCreated: 2025-01-26T17:35:57.754Z
@@ -140,9 +140,6 @@ exit 0
 ```php
 	function getSettings($params, $context) {
         $this->validateMethodContext($context, [ 'role' => OMV_ROLE_ADMINISTRATOR ]);
-         
-        $this->updateSettingsActualIp();
-        
         $db = \OMV\Config\Database::getInstance();
         $object = $db->get('conf.system.FILETYPE.PLUGINNAME');
         return $object->getAssoc();
