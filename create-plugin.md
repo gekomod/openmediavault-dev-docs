@@ -2,7 +2,7 @@
 title: Create Plugin
 description: 
 published: 1
-date: 2025-02-01T06:57:08.208Z
+date: 2025-02-01T06:57:39.128Z
 tags: 
 editor: markdown
 dateCreated: 2025-01-26T17:35:57.754Z
@@ -204,8 +204,6 @@ data:
           type: url
           url: "/FILETYPE/PLUGINNAME"
 ```
-
-# Database write and read
 
 # Bash executables
 
