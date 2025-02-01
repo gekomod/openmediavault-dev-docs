@@ -2,7 +2,7 @@
 title: Create Plugin
 description: 
 published: 1
-date: 2025-02-01T01:02:16.194Z
+date: 2025-02-01T06:57:08.208Z
 tags: 
 editor: markdown
 dateCreated: 2025-01-26T17:35:57.754Z
@@ -174,6 +174,36 @@ class ServicesExample extends \OMV\Rpc\ServiceAbstract {
 # Datatable
 
 # Form
+
+```yaml
+version: "1.0"
+type: component
+data:
+  name: omv-FILETYPE-PLUGINNAME-form-page
+  type: formPage
+  config:
+    request:
+      service: NetworkDnshost  #FILETYPE PLUGINNAME
+      get:
+        method: getSettings # From RPC file
+      post:
+        method: setSettings # From RPC file
+    fields:
+      - type: checkbox
+        name: option1_fromDB
+        label: _("NAME OPTION1")
+        value: false
+      - type: textInput
+        name: option2_fromDB
+        label: _("Option Name2")
+        value: "username"
+    buttons:
+      - template: submit
+      - template: cancel
+        execute:
+          type: url
+          url: "/FILETYPE/PLUGINNAME"
+```
 
 # Database write and read
 
