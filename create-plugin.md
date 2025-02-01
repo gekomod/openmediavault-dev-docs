@@ -2,7 +2,7 @@
 title: Create Plugin
 description: 
 published: 1
-date: 2025-02-01T06:57:39.128Z
+date: 2025-02-01T07:02:10.229Z
 tags: 
 editor: markdown
 dateCreated: 2025-01-26T17:35:57.754Z
@@ -135,6 +135,34 @@ exit 0
                 }
 ```
 
+#### GetSettings in RPC
+
+```php
+	function getSettings($params, $context) {
+        $this->validateMethodContext($context, [ 'role' => OMV_ROLE_ADMINISTRATOR ]);
+         
+        $this->updateSettingsActualIp();
+        
+        $db = \OMV\Config\Database::getInstance();
+        $object = $db->get('conf.system.FILETYPE.PLUGINNAME');
+        return $object->getAssoc();
+	}
+```
+
+#### SetSettings in RPC
+
+```php
+	function setSettings($params, $context) {
+        $this->validateMethodContext($context, ['role' => OMV_ROLE_ADMINISTRATOR]);
+        $db = \OMV\Config\Database::getInstance();
+        $object = $db->get('conf.system.FILETYPE.PLUGINNAME');
+        $object->setAssoc($params);
+        $db->set($object);
+    
+        return $object->getAssoc();
+	}
+```
+
 # Files
 
 ### rpc
@@ -206,6 +234,42 @@ data:
 ```
 
 # Bash executables
+In RPC file command example
+
+```php
+    function Example($params) {
+        return $this->execBgProc(function($bgStatusFilename, $bgOutputFilename)
+		  use ($object, $params) {
+        $db = \OMV\Config\Database::getInstance();
+        $provider = $params['provider'];
+        $object = $db->get('conf.system.FILETYPE.PLUGINNAME');
+        if (FALSE === $object->get("".$provider."") ) {
+              throw new \OMV\Exception(
+				"Failed to run scheduled job because the service is disabled.");
+        } else {
+            $cmdArgs = [];
+			$cmdArgs[] = "--shell";
+			$cmdArgs[] = "--non-interactive";
+			$cmdArgs[] = "--";
+			$cmdArgs[] = build_path(DIRECTORY_SEPARATOR, \OMV\Environment::get("OMV_CRONSCRIPTS_DIR"), sprintf("$provider-%s", 100));
+
+             $cmd = new \OMV\System\Process("python3 /usr/sbin/EXAMPLE.py", "-d $provider");
+             $cmd->setRedirect2to1();
+             $cmd->execute($output);
+             $cmdLine = $cmd->getCommandLine();
+             $stats = implode("\n", $output);
+            
+             $exitStatus = $this->exec($cmdLine, $output, $bgOutputFilename);
+             
+             if (0 !== $exitStatus)
+				throw new \OMV\ExecException($cmdLine, $output, $exitStatus);
+            
+            return $output;
+        }
+
+		});
+    }
+```
 
 # Generating the deb file and installing
 
